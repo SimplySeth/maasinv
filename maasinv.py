@@ -103,8 +103,20 @@ class MaasInv(object):
         data = client.get("nodes/").read().decode('utf-8')
         return data
 
-
     def getGroups(self):
+      '''
+        Dynamically create groups and group nodes
+      '''
+      nodes = self.getNodes()
+      group_dict = defaultdict(lambda: {})
+      data =  json.loads(nodes)
+      for l in data:
+        if '-' not in l['hostname']:
+          g = re.split('[0-9]+',l['hostname'],flags=re.IGNORECASE)[0]
+          group_dict[g]
+      return json.dumps(group_dict,indent=1,sort_keys=True,separators=(',', ': '))
+
+    def getGoupInv(self):
       '''
         Dynamically create groups and group nodes
       '''
@@ -159,10 +171,10 @@ class MaasInv(object):
         return False
 
     def getNodeInv(self,nodename):
-        '''
-            Construct the output for a single node.
-            This returns two facts, the first IP and the Powered State.
-        '''
+      '''
+        Construct the output for a single node.
+        This returns two facts, the first IP and the Powered State.
+      '''
       node = self.getNodeData(nodename)
       if not node[1]:
         return False
@@ -189,6 +201,8 @@ def getArgs():
     default=False,help='Get the raw data dump from MAAS.')
   parser.add_argument('--raw-host',dest='rawhost', action='store',
     default=False, help='Get the raw data on a specific host from MAAS when given a hostname.')
+  parser.add_argument('--groups',dest='groups', action='store_true',
+    default=False, help='Get the generated groups.')
   args = parser.parse_args()
   if len(sys.argv) < 2:
     parser.print_help()
@@ -200,9 +214,11 @@ def main():
   args =  getArgs()
   m = MaasInv()
   if args.list:
-    return m.getGroups()
+    return m.getGroupInv()
   if args.hostname:
     return m.getNodeInv(args.hostname)
+  if args.groups:
+    return m.getGroups()
   if args.rawall:
     return m.getNodes()
   if args.rawhost:
