@@ -84,8 +84,7 @@ class MaasInv(object):
     '''
     def __init__(self):
         '''
-          profile is the profile-name that was set when you `maas login` was run
-          filename is the name of the file where the node json info gets written to
+            Initialize the connection and return a client (cursor?) ...
         '''
         try:
             config = configparser.ConfigParser()
@@ -131,6 +130,9 @@ class MaasInv(object):
       return json.dumps(group_dict,indent=1,sort_keys=True,separators=(',', ': '))
 
     def getNode(self,hostname):
+        '''
+            Raw node query from MAAS ...
+        '''
         client = self.client
         data = client.get("nodes/?hostname="+hostname).read().decode('utf-8')
         return data
@@ -157,6 +159,10 @@ class MaasInv(object):
         return False
 
     def getNodeInv(self,nodename):
+        '''
+            Construct the output for a single node.
+            This returns two facts, the first IP and the Powered State.
+        '''
       node = self.getNodeData(nodename)
       if not node[1]:
         return False
