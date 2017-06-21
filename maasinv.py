@@ -116,7 +116,7 @@ class MaasInv(object):
           group_dict[g]
       return json.dumps(group_dict,indent=1,sort_keys=True,separators=(',', ': '))
 
-    def getGoupInv(self):
+    def getGroupInv(self):
       '''
         Dynamically create groups and group nodes
       '''
