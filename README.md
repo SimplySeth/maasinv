@@ -16,7 +16,7 @@ The python3-maas-client seems to only be available on Ubuntu.
 
 `apt install python3-maas-client`
 
-If you wish to do this on a non-Ubuntu machine, you will have to grab the contents of `dpkg -L python3-maas-client` from and Ubuntu box and copy it over to your python3 directories.
+If you wish to do this on a non-Ubuntu machine, you will have to grab the contents of `dpkg -L python3-maas-client` from an Ubuntu box and copy it over to your python3 directories.
 
 ### Usage
 This script creates groups based on the first letters of the hostname.
@@ -51,4 +51,13 @@ To run tasks against a specific MAAS node in a specific group ...
 
 ` ansible swmwrk -m setup -i ./maasinv.py -l nodename`
 
+Output when using `--host`:
+
+```
+./maasinv.py --host swmwrk0002
+{
+  "ansible_ssh_host": "192.178.7.2",
+  "hw_power_status": "POWERED ON"
+}
+```
 
